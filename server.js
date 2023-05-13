@@ -50,6 +50,20 @@ connection.query(createTableQuery, (error, results) => {
 });
 
 
+// insert
+
+const insertQuery = `
+    INSERT INTO users (name, email, age) VALUES ('Atul', 'atul@sbilife.co.in', 25)
+`;
+
+connection.query(insertQuery, (error, results) =>{
+    if(error)
+        console.error('Error inserting data: ', error);
+    else    
+        console.log('Data inserted successfully!');
+});
+
+
 // Connection closing
 
 connection.end((error) => {
