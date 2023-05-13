@@ -1,20 +1,37 @@
 document.addEventListener('DOMContentLoaded', function() {
-    alert('Page loaded')
+    console.log('Page loaded')
 });
 
-function callapi(){
-    fetch('http://localhost:3000/data')
-    .then(response => {
-        if (!response.ok) {
-        throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-        // Process the retrieved data
-    })
-    .catch(error => {
-        console.error('Error:', error);
+
+function login(){
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
+
+    callapi(username,password)
+
+}
+
+
+function callapi(username, password){
+    let myHeaders = new Headers();
+    myHeaders.append("content-type", "application/json");
+
+    let raw = JSON.stringify({
+        "username": username,
+        "password": password,
     });
+
+    let requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+    };
+
+    fetch("http://localhost:3000/login", requestOptions)
+        .then(response => response.text())
+        .then(result => {
+            alert(result)
+        })
+        .catch(error => console.log('error', error));
 }
