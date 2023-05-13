@@ -64,6 +64,20 @@ connection.query(insertQuery, (error, results) =>{
 });
 
 
+// Update
+
+const updateQuery = `
+    UPDATE users SET age = 26 WHERE id = 1
+`;
+
+connection.query(updateQuery, (error, results) => {
+    if(error)
+        console.error('Error updating data: ', error);
+    else
+        console.log('Data updated successfully!');
+})
+
+
 // Connection closing
 
 connection.end((error) => {
