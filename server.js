@@ -4,14 +4,6 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-app.get('/', (req, res) =>{
-    res.send('Hello from express')
-});
-
-app.listen(port, () =>{
-    console.log('Server is running on port ${port}');
-})
-
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -30,15 +22,83 @@ connection.connect((error) =>{
     console.log('Connected to MySQL Server!');
 });
 
+app.get('/', (req, res, next) =>{
+    res.send('Hello from express')
+    next()
+});
+
+async function getCustomerFromDB(){
+    debugger
+    return new Promise((resolve, reject) => {
+        const selectQuery = 'SELECT * FROM customers';
+        connection.query(selectQuery, (error, results) => {
+            if(error){
+                // console.error('Error executing query: ', error);
+                reject('Error executing query: ', error)
+                return;
+            }
+            console.log('Query results: ', results);
+            resolve(results)
+    
+        })
+    });
+}
+
+// Define a route handler
+app.get('/data', (req, res) => {
+    // Execute the SQL query
+    connection.query('SELECT * FROM customers', (error, results) => {
+      if (error) {
+        console.error('Error executing the query: ', error);
+        res.status(500).send('Error retrieving data');
+        return;
+      }
+      // Send the query results as the response
+      res.json(results);
+    });
+});
+
+app.get('/customers', (req, res, next) =>{
+    debugger
+
+    res.set('Content-Type', 'application/json');
+    res.sendStatus(200);
+    res.send()
+
+    const selectQuery = 'SELECT * FROM customers';
+    connection.query(selectQuery, (error, results) => {
+        if(error){
+            console.error('Error executing query: ', error);
+            // reject('Error executing query: ', error)
+            return;
+        }
+        console.log('Query results: ', results);
+        // resolve(results)
+        res.send(results)
+
+    })
+
+    // getCustomerFromDB((result) => {
+    //     console.log(result);
+    //     res.json(result);
+    // });
+   
+    next()
+});
+
+
+
+
+
 // Select 
 
-connection.query('SELECT * FROM customers', (error, results) => {
-    if(error){
-        console.error('Error executing query: ', error);
-        return;
-    }
-    console.log('Query results: ', results);
-});
+// connection.query('SELECT * FROM customers', (error, results) => {
+//     if(error){
+//         console.error('Error executing query: ', error);
+//         return;
+//     }
+//     console.log('Query results: ', results);
+// });
 
 
 
@@ -54,12 +114,12 @@ const createTableQuery = `
     )
 `;
 
-connection.query(createTableQuery, (error, results) => {
-    if(error)
-        console.error('Error creating table: ', error);
-    else
-        console.log('Table created successfully!');
-});
+// connection.query(createTableQuery, (error, results) => {
+//     if(error)
+//         console.error('Error creating table: ', error);
+//     else
+//         console.log('Table created successfully!');
+// });
 
 
 // insert
@@ -68,12 +128,12 @@ const insertQuery = `
     INSERT INTO users (name, email, age) VALUES ('Atul', 'atul@sbilife.co.in', 25)
 `;
 
-connection.query(insertQuery, (error, results) =>{
-    if(error)
-        console.error('Error inserting data: ', error);
-    else    
-        console.log('Data inserted successfully!');
-});
+// connection.query(insertQuery, (error, results) =>{
+//     if(error)
+//         console.error('Error inserting data: ', error);
+//     else    
+//         console.log('Data inserted successfully!');
+// });
 
 
 // Update
@@ -82,20 +142,24 @@ const updateQuery = `
     UPDATE users SET age = 26 WHERE id = 1
 `;
 
-connection.query(updateQuery, (error, results) => {
-    if(error)
-        console.error('Error updating data: ', error);
-    else
-        console.log('Data updated successfully!');
-})
+// connection.query(updateQuery, (error, results) => {
+//     if(error)
+//         console.error('Error updating data: ', error);
+//     else
+//         console.log('Data updated successfully!');
+// })
 
 
 // Connection closing
 
-connection.end((error) => {
-    if(error){
-        console.log('Error closing connection: ', error);
-        return;
-    }
-    console.log('Connection closed!');
+// connection.end((error) => {
+//     if(error){
+//         console.log('Error closing connection: ', error);
+//         return;
+//     }
+//     console.log('Connection closed!');
+// })
+
+app.listen(port, () =>{
+    console.log('Server is running on port ${port}');
 })
