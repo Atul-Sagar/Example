@@ -1,0 +1,23 @@
+create database DB1;
+
+CREATE TABLE customers (id int(10), name varchar(50), city varchar(50), PRIMARY KEY (id ) );
+INSERT INTO customers VALUES(101,'rahul','delhi');
+INSERT INTO customers VALUES(102,'rajan','mumbai');
+INSERT INTO customers VALUES(103,'rohit','banglore');
+INSERT INTO customers VALUES(104,'raman','chennai');
+INSERT INTO customers VALUES(105,'ronit','jaipur');
+INSERT INTO customers VALUES(106,'ranjit','surat');
+
+select * from customers;
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
+ALTER USER 'Atul'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Atul';
+
+CREATE TABLE auth (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL
+);
+
+insert into auth (username, password) values ('Atul','1234');
+SELECT * FROM auth WHERE username = 'Atul';
