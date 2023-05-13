@@ -1,6 +1,8 @@
 const mysql = require('mysql2')
 const express = require('express')
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 
 const app = express()
 const port = 3000
@@ -8,12 +10,16 @@ const port = 3000
 app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 // app.use(cors());
 
+// Middleware
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'root',
     database: 'db1',
-    authPlugin: 'mysql_native_password',
+    // authPlugin: 'mysql_native_password',
 });
 
 // Database Connection
@@ -90,6 +96,58 @@ app.get('/customers', (req, res, next) =>{
     next()
 });
 
+
+// Login endpoint
+app.post('/login', (req, res) => {
+    // const { username, password } = req.body;
+    debugger
+    let username = req.body.username 
+    let password = req.body.password
+    console.log(req.body);
+    // console.log("username : ", username);
+    // console.log("password : ", password);
+  
+    // Check if the username exists in the database
+    // connection.query('SELECT * FROM auth WHERE username = "?"', [username], (error, results) => {
+    connection.query('SELECT * FROM auth WHERE username = ?', [username], (error, results) => {
+        if (error) {
+            console.error('Error executing the query: ', error);
+            res.status(500).json({ message: 'Error retrieving user data' });
+            return;
+        }
+    
+        if (results.length === 0) {
+            res.status(401).json({ message: 'Invalid credentials' });
+            return;
+        }
+
+        // comparing passwords
+        if(password == results[0].password){
+            res.status(200).json({ message: 'Login successful' });
+            return
+        }else{
+            res.status(401).json({ message: 'Invalid credentials' });
+            return
+        }   
+  
+        // Compare the provided password with the hashed password stored in the database
+    //     bcrypt.compare(password, results[0].password, (bcryptError, bcryptResult) => {
+    //         if (bcryptError) {
+    //         console.error('Error comparing passwords: ', bcryptError);
+    //         res.status(500).json({ message: 'Error authenticating user' });
+    //         return;
+    //         }
+    
+    //         if (!bcryptResult) {
+    //         res.status(401).json({ message: 'Invalid credentials' });
+    //         return;
+    //         }
+    
+    //         res.status(200).json({ message: 'Login successful' });
+    //     });
+    });
+});
+  
 
 
 
