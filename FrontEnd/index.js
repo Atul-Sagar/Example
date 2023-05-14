@@ -35,3 +35,7 @@ function callapi(username, password){
         })
         .catch(error => console.log('error', error));
 }
+
+$('.message a').click(function(){
+    $('form').animate({height: "toggle", opacity: "toggle"}, "slow");
+ });

@@ -3,12 +3,37 @@ const express = require('express')
 const cors = require('cors');
 const bcrypt = require('bcrypt');
 const bodyParser = require('body-parser');
+const fs = require('fs');
+const path = require('path');
+const luxon = require('luxon');
 
 const app = express()
 const port = 3000
 
 // app.use(cors({ origin: 'http://127.0.0.1:5500' }));
 app.use(cors());
+
+// Specify the path and filename for the log file
+const logDirectory = path.join(__dirname, 'logs');
+const logFilePath = path.join(logDirectory, 'app.log');
+
+// Create the logs directory if it doesn't exist
+if (!fs.existsSync(logDirectory)) {
+  fs.mkdirSync(logDirectory);
+}
+
+
+const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
+console.log = function (message, lineNo) {
+  const currentTime = luxon.DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');
+  const logMessage = `${currentTime} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
+//   const logMessage = `${new Date().toISOString()} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
+  logStream.write(logMessage);
+  process.stdout.write(logMessage);
+//   logStream.write(`${new Date().toISOString()} - ${message} - Line no - ${lineNo}\n`);
+//   process.stdout.write(`${message}\n`);
+};
+
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -103,7 +128,7 @@ app.post('/login', (req, res) => {
     debugger
     let username = req.body.username 
     let password = req.body.password
-    console.log(req.body);
+    console.log("Request Body: ",req.body, 125);
     // console.log("username : ", username);
     // console.log("password : ", password);
   
@@ -223,5 +248,5 @@ const updateQuery = `
 // })
 
 app.listen(port, () =>{
-    console.log('Server is running on port ${port}');
+    console.log(`Server is running on port ${port}`);
 })
