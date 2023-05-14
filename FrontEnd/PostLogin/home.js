@@ -9,7 +9,7 @@ function loadCustomers(){
     var raw = "";
 
     var requestOptions = {
-        method: 'GET',
+        method: 'POST',
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
@@ -19,8 +19,40 @@ function loadCustomers(){
         .then(response => response.text())
         .then(result => {
             console.log(result)
-            
+           handleResponse(result)
+
         })
         .catch(error => console.log('error', error));
 
+}
+
+function handleResponse(JSONString){
+    let json = JSON.parse(JSONString)
+    let container;
+    container = document.createElement("div");
+    for (let index = 0; index < json.length; index++) {
+        console.log(json[index]);
+
+        // let body = document.getElementsByName("body");
+
+        let div;
+        
+        container.setAttribute("class","container-div")
+        div = document.createElement("div");
+        div.setAttribute("class", "card-div")
+        let pid, pname, pcity;
+        pid = document.createElement("p")
+        pname = document.createElement("p")
+        pcity = document.createElement("p")
+        pid.innerText = "ID : "+json[index].id
+        div.appendChild(pid)
+        pname.innerText ="Name :"+json[index].name
+        div.appendChild(pname)
+        pcity.innerText ="City : "+json[index].city
+        div.appendChild(pcity)
+        container.appendChild(div)
+        document.body.append(container)
+
+        
+    }
 }

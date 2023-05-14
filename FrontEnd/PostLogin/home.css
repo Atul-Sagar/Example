@@ -1,0 +1,23 @@
+.card-div{
+    border: 1px solid black;
+    height: max-content;
+    width: max-content;
+    background: linear-gradient(90deg, rgba(67,226,120,1) 0%, rgba(9,121,113,0.815091002221201) 35%, rgba(39,68,193,1) 100%);
+    color: white;
+    font-weight: bold;
+    font-size: large;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 25px;
+}
+.container-div{
+    display: flex;
+}
+body {
+    background: #76b852; /* fallback for old browsers */
+    background: rgb(141,194,111);
+    background: linear-gradient(90deg, rgba(141,194,111,1) 0%, rgba(118,184,82,1) 50%);
+    font-family: "Roboto", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;      
+}

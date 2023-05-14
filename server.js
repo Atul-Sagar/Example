@@ -86,7 +86,8 @@ async function getCustomerFromDB(){
 }
 
 // Define a route handler
-app.get('/data', (req, res) => {
+app.post('/data', (req, res) => {
+    debugger
     // Execute the SQL query
     connection.query('SELECT * FROM customers', (error, results) => {
       if (error) {
