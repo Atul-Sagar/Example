@@ -31,7 +31,16 @@ function callapi(username, password){
     fetch("http://localhost:3000/login", requestOptions)
         .then(response => response.text())
         .then(result => {
-            alert(result)
+            // alert(result)
+            
+            if(JSON.parse(result).message == 'Login successful'){
+                location.href='./PostLogin/home.html'
+
+            }else if(JSON.parse(result).message == 'Invalid credentials'){
+                alert("Invalid credentials, Try Again")
+            }else{
+                alert("Something went wrong")
+            }
         })
         .catch(error => console.log('error', error));
 }

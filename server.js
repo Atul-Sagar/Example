@@ -24,15 +24,21 @@ if (!fs.existsSync(logDirectory)) {
 
 
 const logStream = fs.createWriteStream(logFilePath, { flags: 'a' });
-console.log = function (message, lineNo) {
-  const currentTime = luxon.DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');
-  const logMessage = `${currentTime} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
-//   const logMessage = `${new Date().toISOString()} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
-  logStream.write(logMessage);
-  process.stdout.write(logMessage);
-//   logStream.write(`${new Date().toISOString()} - ${message} - Line no - ${lineNo}\n`);
-//   process.stdout.write(`${message}\n`);
+console.log = function (message) {
+    const currentTime = luxon.DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');
+    const logMessage = `${currentTime} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
+    logStream.write(`${logMessage}`);
+    process.stdout.write(`${logMessage}`);
 };
+// console.log = function (message, lineNo) {
+//   const currentTime = luxon.DateTime.now().setZone('Asia/Kolkata').toFormat('yyyy-MM-dd HH:mm:ss');
+//   const logMessage = `${currentTime} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
+// //   const logMessage = `${new Date().toISOString()} - ${typeof message === 'object' ? JSON.stringify(message) : message}\n`;
+//   logStream.write(logMessage);
+//   process.stdout.write(logMessage);
+// //   logStream.write(`${new Date().toISOString()} - ${message} - Line no - ${lineNo}\n`);
+// //   process.stdout.write(`${message}\n`);
+// };
 
 
 // Middleware
@@ -93,33 +99,32 @@ app.get('/data', (req, res) => {
     });
 });
 
-app.get('/customers', (req, res, next) =>{
-    debugger
+// app.get('/customers', (req, res, next) =>{
+//     debugger
 
-    res.set('Content-Type', 'application/json');
-    res.sendStatus(200);
-    res.send()
+//     res.set('Content-Type', 'application/json');
+//     // res.sendStatus(200);
+//     // res.send()
 
-    const selectQuery = 'SELECT * FROM customers';
-    connection.query(selectQuery, (error, results) => {
-        if(error){
-            console.error('Error executing query: ', error);
-            // reject('Error executing query: ', error)
-            return;
-        }
-        console.log('Query results: ', results);
-        // resolve(results)
-        res.send(results)
+//     const selectQuery = 'SELECT * FROM customers';
 
-    })
+//     connection.query(selectQuery, (error, results) => {
+//         if (error) {
+//           console.error('Error executing the query: ', error);
+//           res.status(500).send('Error retrieving data');
+//           return;
+//         }
+//         // Send the query results as the response
+//         res.json(results);
+//     });
 
-    // getCustomerFromDB((result) => {
-    //     console.log(result);
-    //     res.json(result);
-    // });
+//     // getCustomerFromDB((result) => {
+//     //     console.log(result);
+//     //     res.json(result);
+//     // });
    
-    next()
-});
+//     next()
+// });
 
 
 // Login endpoint
@@ -128,7 +133,7 @@ app.post('/login', (req, res) => {
     debugger
     let username = req.body.username 
     let password = req.body.password
-    console.log("Request Body: ",req.body, 125);
+    console.log("Request Body: ", {key : "value"});
     // console.log("username : ", username);
     // console.log("password : ", password);
   
